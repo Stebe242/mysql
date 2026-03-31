@@ -1,20 +1,17 @@
 # vim:set ft=dockerfile:
-ARG BASEIMAGE=ubuntu:rolling
+ARG BASEIMAGE=ubuntu:24.04
 FROM $BASEIMAGE
-MAINTAINER Sebastian Braun <sebastian.braun@fh-aachen.de>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG en_US.UTF-8
 
-RUN sed -i 's/archive.ubuntu.com/old-releases.ubuntu.com/' /etc/apt/sources.list \
- && sed -i 's/security.ubuntu.com/old-releases.ubuntu.com/' /etc/apt/sources.list \
- && apt-get update && apt-get install --no-install-recommends -y -q \
+RUN apt-get update && apt-get install --no-install-recommends -y -q \
     ca-certificates \
     gettext-base \
- && apt-get install -y -q \
+    && apt-get install -y -q \
     mariadb-server \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /entrypoint.sh
 ENV DBDATA "/var/lib/mysql"
